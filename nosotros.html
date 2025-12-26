@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nosotros - Metalpack</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: #fff;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .top-bar-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+            font-size: 0.9rem;
+            color: #333;
+        }
+
+        .top-bar-email,
+        .top-bar-phone {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Main Navigation */
+        .main-nav {
+            background: #283550;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo-link {
+            text-decoration: none;
+            display: inline-block;
+            transition: opacity 0.3s;
+        }
+
+        .logo-link:hover {
+            opacity: 0.8;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: #4A90E2;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .logo-icon::before {
+            content: '⚙';
+            font-size: 2rem;
+            color: white;
+        }
+
+        .logo-icon::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60"><circle cx="30" cy="30" r="25" fill="none" stroke="white" stroke-width="2"/><path d="M20 20 L25 25 M35 25 L40 20 M20 40 L25 35 M35 35 L40 40" stroke="white" stroke-width="1.5"/></svg>') no-repeat center;
+            background-size: 80%;
+            opacity: 0.3;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-main {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #fff;
+            line-height: 1.2;
+        }
+
+        .logo-sub {
+            font-size: 0.75rem;
+            color: #fff;
+            font-weight: normal;
+            line-height: 1.2;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: normal;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        .nav-links a.active {
+            font-weight: bold;
+        }
+
+        .whatsapp-btn {
+            background: #28A745;
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .whatsapp-btn:hover {
+            background: #218838;
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .mobile-menu-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: #fff;
+            margin: 5px 0;
+            transition: 0.3s;
+        }
+
+        .mobile-menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        .mobile-nav {
+            display: flex;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #283550;
+            z-index: 9999;
+            flex-direction: column;
+            padding: 2rem 1.5rem;
+            overflow-y: auto;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(-100%);
+            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+        }
+
+        .mobile-nav.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+
+        .mobile-nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 3rem;
+        }
+
+        .mobile-nav-logo-link {
+            text-decoration: none;
+            display: inline-block;
+            transition: opacity 0.3s;
+        }
+
+        .mobile-nav-logo-link:hover {
+            opacity: 0.8;
+        }
+
+        .mobile-nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .mobile-nav-logo-icon {
+            width: 50px;
+            height: 50px;
+            background: #4A90E2;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .mobile-nav-logo-icon::before {
+            content: '⚙';
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .mobile-nav-logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mobile-nav-logo-main {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff;
+            line-height: 1.2;
+        }
+
+        .mobile-nav-logo-sub {
+            font-size: 0.65rem;
+            color: #fff;
+            font-weight: normal;
+            line-height: 1.2;
+        }
+
+        .mobile-nav-close {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 2.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            line-height: 1;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s;
+        }
+
+        .mobile-nav-close:hover {
+            opacity: 0.7;
+        }
+
+        .mobile-nav .nav-links {
+            flex-direction: column;
+            gap: 0;
+            width: 100%;
+            align-items: flex-start;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .mobile-nav .nav-links li {
+            width: 100%;
+        }
+
+        .mobile-nav .nav-links a {
+            display: block;
+            padding: 1rem 0;
+            font-size: 1.1rem;
+            color: #fff !important;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            width: 100%;
+        }
+
+        .mobile-nav .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        .mobile-nav .nav-links li:first-child a {
+            font-weight: bold;
+            font-size: 1.3rem;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .mobile-nav .whatsapp-btn {
+            margin-top: 2rem;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* Hero Section - Nosotros */
+        .nosotros-hero {
+            position: relative;
+            min-height: 85vh;
+            display: flex;
+            align-items: flex-end;
+            background-image: url('images/nosotros-bg.png');
+            background-size: 100% 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            overflow: hidden;
+        }
+
+        .nosotros-hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .nosotros-hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            width: 100%;
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .nosotros-hero-text {
+            position: relative;
+            padding-bottom: 2rem;
+        }
+
+        .nosotros-hero-label {
+            font-size: 1rem;
+            color: #fff;
+            margin-bottom: 0.5rem;
+            font-weight: normal;
+        }
+
+        .nosotros-hero-title {
+            font-size: 6rem;
+            font-weight: bold;
+            color: #fff;
+            line-height: 1;
+            margin-bottom: 0;
+            text-transform: uppercase;
+        }
+
+        .nosotros-hero-subtitle {
+            font-size: 5rem;
+            font-weight: bold;
+            color: #28A745;
+            line-height: 1;
+            margin-top: -1rem;
+            text-transform: uppercase;
+        }
+
+        .nosotros-whatsapp-btn {
+            background: #28A745;
+            color: #fff;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            display: none;
+            margin-top: 2rem;
+            text-align: center;
+            transition: background 0.3s;
+        }
+
+        .nosotros-whatsapp-btn:hover {
+            background: #218838;
+        }
+
+        /* Pilares Section */
+        .pilares-section {
+            padding: 6rem 2rem 2rem;
+            background: #fff;
+        }
+
+        .pilares-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .pilares-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .pilares-subtitle {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .pilares-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #000;
+            margin-bottom: 1.5rem;
+        }
+
+        .pilares-description {
+            font-size: 1rem;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* Vision Mission Section */
+        .vision-mission-section {
+            padding: 2rem 2rem 6rem;
+            background: #fff;
+        }
+
+        .vision-mission-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .vision-mission-text {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+        }
+
+        .vision-mission-item {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .vision-mission-item h3 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #000;
+            margin-bottom: 0.5rem;
+        }
+
+        .vision-mission-item p {
+            font-size: 1rem;
+            color: #333;
+            line-height: 1.8;
+        }
+
+        .vision-mission-image {
+            width: 100%;
+            height: 600px;
+            background-image: url('images/Pilares-de-nuestra-empresa.jpg');
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vision-mission-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .vision-mission-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .vision-mission-image {
+                height: 400px;
+            }
+
+            .nosotros-hero-title {
+                font-size: 4rem;
+            }
+
+            .nosotros-hero-subtitle {
+                font-size: 3.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .top-bar {
+                display: none;
+            }
+
+            .main-nav {
+                position: relative;
+                background: #283550;
+                padding: 1rem;
+            }
+
+            .nav-content {
+                position: relative;
+                padding: 0;
+            }
+
+            .logo-text {
+                gap: 0.2rem;
+            }
+
+            .logo-main {
+                font-size: 1.3rem;
+            }
+
+            .logo-sub {
+                font-size: 0.6rem;
+            }
+
+            .logo-icon {
+                width: 45px;
+                height: 45px;
+            }
+
+            .nav-content .nav-links {
+                display: none;
+            }
+
+            .nav-content .whatsapp-btn {
+                display: none;
+            }
+
+            .mobile-nav .nav-links {
+                display: flex !important;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .nosotros-hero {
+                min-height: auto;
+                align-items: center;
+                background-image: none;
+                background-color: #283550;
+                background-size: cover;
+                padding: 3rem 0;
+            }
+
+            .nosotros-hero-overlay {
+                display: none;
+            }
+
+            .nosotros-hero-content {
+                padding: 2rem 1.5rem;
+            }
+
+            .nosotros-hero-title {
+                font-size: 2.5rem;
+            }
+
+            .nosotros-whatsapp-btn {
+                display: inline-block;
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .nosotros-hero-subtitle {
+                font-size: 2rem;
+                margin-top: -0.5rem;
+            }
+
+            .nosotros-hero-label {
+                font-size: 0.85rem;
+            }
+
+            .pilares-section {
+                padding: 3rem 1.5rem;
+            }
+
+            .pilares-header {
+                text-align: left;
+            }
+
+            .pilares-subtitle {
+                font-size: 0.85rem;
+            }
+
+            .pilares-title {
+                font-size: 1.8rem;
+                text-align: left;
+            }
+
+            .pilares-description {
+                text-align: left;
+                font-size: 0.95rem;
+            }
+
+            .vision-mission-section {
+                padding: 3rem 1.5rem;
+            }
+
+            .vision-mission-item h3 {
+                font-size: 1.3rem;
+            }
+
+            .vision-mission-item p {
+                font-size: 0.95rem;
+            }
+
+            .vision-mission-image {
+                height: 300px;
+            }
+
+            footer {
+                padding: 2rem 1.5rem 1rem;
+            }
+
+            .footer-top {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .footer-main {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .footer-logo-section {
+                order: 1;
+            }
+
+            .footer-contact-section {
+                order: 2;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nosotros-hero-title {
+                font-size: 2rem;
+            }
+
+            .nosotros-hero-subtitle {
+                font-size: 1.6rem;
+            }
+
+            .pilares-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header placeholder -->
+    <div id="header-placeholder"></div>
+
+    <script src="header.js"></script>
+
+    <!-- Hero Section -->
+    <section class="nosotros-hero">
+        <div class="nosotros-hero-overlay"></div>
+        <div class="nosotros-hero-content">
+            <div class="nosotros-hero-text">
+                <div class="nosotros-hero-label">Metalpack</div>
+                <h1 class="nosotros-hero-title">Nosotros</h1>
+                <!-- <div class="nosotros-hero-subtitle">METALPACK</div> -->
+                <a href="https://wa.me/595213299828" class="nosotros-whatsapp-btn">Contactanos en WhatsApp</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pilares Section -->
+    <section class="pilares-section">
+        <div class="pilares-container">
+            <div class="pilares-header">
+                <div class="pilares-subtitle">Nuestros valores</div>
+                <h2 class="pilares-title">Pilares de nuestra empresa</h2>
+                <p class="pilares-description">Somos una empresa que acompaña con su amplia experiencia el desarrollo de productos y servicios que demanda la industria de nuestro país, en los rubros eléctricos, tratamiento de agua, metal mecánicos y de construcciones.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vision Mission Section -->
+    <section class="vision-mission-section">
+        <div class="vision-mission-container">
+            <div class="vision-mission-text">
+                <div class="vision-mission-item">
+                    <h3>Nuestra visión</h3>
+                    <p>Ser líder como empresa que ofrece productos y servicios confiables para cumplir y satisfacer adecuadamente las necesidades del mercado nacional, con un alto enfoque en la óptima gestión de los recursos necesarios y así lograr la confianza y credibilidad de nuestros clientes.</p>
+                </div>
+                <div class="vision-mission-item">
+                    <h3>Nuestra misión</h3>
+                    <p>La empresa tiene la misión de ofrecer productos y servicios que logren alcanzar la satisfacción del cliente, brindando profesionalismo en cada trabajo. Sostener una responsabilidad constante sobre la calidad de nuestros productos y servicios para generar la rentabilidad mutua con nuestros clientes. Incentivar el desarrollo profesional de nuestros colaboradores como base de desarrollo de nuestra empresa.</p>
+                </div>
+            </div>
+            <div class="vision-mission-image">
+                <!-- Worker grinding metal image -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <script src="footer.js"></script>
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const mobileNav = document.getElementById('mobileNav');
+        const mobileNavClose = document.getElementById('mobileNavClose');
+
+        function openMobileMenu() {
+            if (mobileNav) {
+                mobileNav.classList.add('active');
+                if (mobileMenuToggle) {
+                    mobileMenuToggle.classList.add('active');
+                }
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeMobileMenu() {
+            if (mobileNav) {
+                mobileNav.classList.remove('active');
+                if (mobileMenuToggle) {
+                    mobileMenuToggle.classList.remove('active');
+                }
+                document.body.style.overflow = '';
+            }
+        }
+
+        if (mobileMenuToggle) {
+            mobileMenuToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (mobileNav.classList.contains('active')) {
+                    closeMobileMenu();
+                } else {
+                    openMobileMenu();
+                }
+            });
+        }
+
+        if (mobileNavClose) {
+            mobileNavClose.addEventListener('click', function(e) {
+                e.stopPropagation();
+                closeMobileMenu();
+            });
+        }
+
+        // Close mobile menu when clicking on a link
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav a');
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                closeMobileMenu();
+            });
+        });
+
+        // Close mobile menu when clicking outside
+        if (mobileNav) {
+            mobileNav.addEventListener('click', function(e) {
+                if (e.target === mobileNav) {
+                    closeMobileMenu();
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+
